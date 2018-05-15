@@ -1,2 +1,6 @@
 .idea/
 src/__pycache__/
+src/dispatch/contents/
+src/parse/__pycache__/
+src/download/__pycache__/
+src/manage/__pycache__/
