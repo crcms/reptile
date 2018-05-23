@@ -6,7 +6,7 @@
 
 '''
 
-from setuptools import setup,find_packages
+from setuptools import setup, find_packages
 
 setup(
     name='reptile',
@@ -22,8 +22,8 @@ setup(
     # 当项目都是.py文件时使用py_modules
     py_modules=find_packages(),
     # 需要的依赖包
-    install_requires = [
-        'requests'
+    install_requires=[
+        'requests', 'bs4', 'urllib'
     ],
     # 程序命令生成
     entry_points='''

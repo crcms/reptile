@@ -36,4 +36,7 @@ class Parse(object):
     def _set_content(self, content):
         self._content = content
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
+    import sys
+
+    print(sys.path)

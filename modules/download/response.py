@@ -41,6 +41,10 @@ class Response(object):
     def responseText(self):
         return self._response.text
 
+    @property
+    def request(self):
+        return self._request
+
     def set_encoding(self, encoding):
         self._encoding = encoding
         self._response.encoding = self._encoding
