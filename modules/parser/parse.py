@@ -12,9 +12,7 @@ from modules.download.response import Response
 
 
 class Parse(metaclass=ABCMeta):
-    '''
-    :type Response
-    '''
+
     _response = None
 
     def __init__(self, response: Response) -> None:

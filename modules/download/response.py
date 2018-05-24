@@ -8,6 +8,7 @@
 
 import requests
 
+from modules.download.request import Request
 
 class Response(object):
     _actuator = None
@@ -15,7 +16,11 @@ class Response(object):
 
     _encoding = 'utf-8'
 
-    def __init__(self, Request):
+    def __init__(self, request):
+        """
+
+        :param Request:
+        """
         self._actuator = requests
         self._request = Request
 
@@ -52,9 +57,8 @@ class Response(object):
 
 
 if __name__ == '__main__':
-    from modules.download.request import Request
+    # from modules.download.request import Request
 
-    request = Request('http://thinkphp.cn')
-
-    response = Response(request)
+    response = Response(Request('http://thinkphp.cn')).set_encoding('utf-8')
+    # Response(request)
     print(response.responseText)

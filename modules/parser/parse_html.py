@@ -14,9 +14,7 @@ from modules.download.response import Response
 
 
 class Html(Parse):
-    '''
-    :type BeautifulSoup
-    '''
+
     _beautifulSoup = None
 
     def __init__(self, response: Response) -> None:
@@ -44,6 +42,10 @@ class Html(Parse):
         return set([parse.scheme + '://' + parse.netloc + '/' + url.attrs.get('href').lstrip('/') for url in urls])
 
     def content(self) -> str:
+        '''
+
+        :return: str
+        '''
         return self._response.responseText
 
 

@@ -9,12 +9,12 @@ request请求头组装处理
 
 class Request(object):
 
+
     _headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36'
     }
 
-    _payload = {
-    }
+    _payload = {}
 
     _method = 'get'
 
@@ -36,7 +36,7 @@ class Request(object):
         if len(payload) > 0:
             self._payload.update(payload)
 
-    def set_method(self, method):
+    def set_method(self, method) -> object:
         method = method.lower()
 
         if method not in self._allowMethods:
@@ -112,7 +112,8 @@ class Request(object):
         del self._payload[key]
         return self
 
+
 if __name__ == '__main__':
-    request = Request('http://baidu.com','get',{'host':'192.168.226.63'},{'name':'test'})
+    request = Request('http://baidu.com', 'get', {'host': '192.168.226.63'}, {'name': 'test'})
     request.set_method('POST')
     print(request.all)
