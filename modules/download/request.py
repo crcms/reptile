@@ -8,10 +8,9 @@ request请求头组装处理
 
 
 class Request(object):
-
-
     _headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36'
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36',
+        'Connection': 'keep-alive'
     }
 
     _payload = {}
@@ -22,7 +21,8 @@ class Request(object):
 
     _url = None
 
-    def __init__(self, url, method='get', headers={}, payload={}, **kwargs):
+
+    def __init__(self, url: str, method: str = 'get', headers: dict = {}, payload: dict = {}, **kwargs) -> 'Request':
         '''
         header设置
         :param kwargs: dict header选项
@@ -36,7 +36,8 @@ class Request(object):
         if len(payload) > 0:
             self._payload.update(payload)
 
-    def set_method(self, method) -> object:
+
+    def set_method(self, method) -> 'Request':
         method = method.lower()
 
         if method not in self._allowMethods:
@@ -46,31 +47,37 @@ class Request(object):
 
         return self
 
+
     @property
-    def method(self):
+    def method(self) -> str:
         return self._method
 
-    def set_url(self, url):
+
+    def set_url(self, url) -> 'Request':
         self._url = url
         return self
 
-    @property
-    def url(self):
-        return self._url
 
     @property
-    def all(self):
+    def url(self) -> str:
+        return self._url
+
+
+    @property
+    def all(self) -> tuple:
         '''
         所有header和payload字典
         :return: dict
         '''
         return (self._url, self._method, self._headers, self._payload)
 
+
     @property
-    def headers(self):
+    def headers(self) -> dict:
         return self._headers
 
-    def get_header(self, key):
+
+    def get_header(self, key: str) -> str or None:
         '''
         获取header的单个值
         :param key: header key
@@ -78,7 +85,8 @@ class Request(object):
         '''
         return self._headers.get(key)
 
-    def set_header(self, key, value):
+
+    def set_header(self, key: str, value) -> 'Request':
         '''
         设置header选项
         :param key: string
@@ -88,7 +96,8 @@ class Request(object):
         self._headers[key] = value
         return self
 
-    def delete_header(self, key):
+
+    def delete_header(self, key: str):
         '''
         删除header选项
         :param key: string
@@ -97,16 +106,20 @@ class Request(object):
         del self._headers[key]
         return self
 
+
     @property
-    def payload(self):
+    def payload(self) -> dict:
         return self._payload
+
 
     def set_payload(self, key, value):
         self._payload[key] = value
         return self
 
+
     def get_payload(self, key):
         return self._payload.get(key)
+
 
     def delete_payload(self, key):
         del self._payload[key]

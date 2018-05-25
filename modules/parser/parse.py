@@ -48,7 +48,7 @@ class Parse(metaclass=ABCMeta):
         :type Response
         :return: Parse()
         '''
-        parse = importlib.import_module('parse_' + type, 'modules.parser')
+        parse = importlib.import_module('modules.parser.parse_' + type)
 
         parse = getattr(parse, type.capitalize())(response)
         if parse is None:

@@ -23,7 +23,7 @@ setup(
     py_modules=find_packages(),
     # 需要的依赖包
     install_requires=[
-        'requests', 'bs4', 'urllib'
+        'requests', 'bs4', 'urllib', 'pymongo'
     ],
     # 程序命令生成
     entry_points='''

@@ -2,13 +2,13 @@
 
 '''
 
-数据下载
+数据下载响应
 
 '''
 
 import requests
-
 from modules.download.request import Request
+
 
 class Response(object):
     _actuator = None
@@ -16,17 +16,19 @@ class Response(object):
 
     _encoding = 'utf-8'
 
-    def __init__(self, request):
+
+    def __init__(self, request: Request) -> 'Response':
         """
 
         :param Request:
         """
         self._actuator = requests
-        self._request = Request
+        self._request = request
 
         self._handle().set_encoding(self._encoding)
 
-    def _handle(self):
+
+    def _handle(self) -> 'Response':
         payload = {}
 
         if self._request.method == 'get':
@@ -34,23 +36,31 @@ class Response(object):
         elif self._request.method == 'post':
             payload['data'] = self._request.payload
 
-        self._response = getattr(self._actuator, self._request.method)(self._request.url, headers=self._request.headers,
+        try:
+            self._response = getattr(self._actuator, self._request.method)(self._request.url, headers=self._request.headers,
                                                                        **payload)
+        except requests.exceptions.RequestException as e:
+            print(e.strerror)
+
         return self
 
+
     @property
-    def response(self):
+    def response(self) -> 'requests.models.Response':
         return self._response
 
+
     @property
-    def responseText(self):
+    def responseText(self) -> str:
         return self._response.text
 
+
     @property
-    def request(self):
+    def request(self) -> Request:
         return self._request
 
-    def set_encoding(self, encoding):
+
+    def set_encoding(self, encoding) -> 'Response':
         self._encoding = encoding
         self._response.encoding = self._encoding
         return self

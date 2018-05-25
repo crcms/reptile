@@ -23,7 +23,9 @@ class Test(object):
 
 class Py(object):
 
+
     y = 1
+
 
     def __init__(self):
         self.test = Test()

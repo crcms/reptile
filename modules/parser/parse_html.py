@@ -14,16 +14,17 @@ from modules.download.response import Response
 
 
 class Html(Parse):
-
     _beautifulSoup = None
 
-    def __init__(self, response: Response) -> None:
+
+    def __init__(self, response: Response) -> 'Html':
         '''
         :param response:
         :type Response
         '''
         super().__init__(response)
         self._beautifulSoup = BeautifulSoup(self._response.responseText, 'html5lib')
+
 
     def urls(self) -> set:
         '''
@@ -41,12 +42,17 @@ class Html(Parse):
 
         return set([parse.scheme + '://' + parse.netloc + '/' + url.attrs.get('href').lstrip('/') for url in urls])
 
+
     def content(self) -> str:
         '''
 
         :return: str
         '''
         return self._response.responseText
+
+
+    def title(self) -> str:
+        return self._beautifulSoup.title.string
 
 
 if __name__ == '__main__':
