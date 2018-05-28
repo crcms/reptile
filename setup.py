@@ -9,7 +9,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='reptile',
+    name='crcms_spider',
     version='0.0.1',
     author='simon',
     author_email='crcms@crcms.cn',

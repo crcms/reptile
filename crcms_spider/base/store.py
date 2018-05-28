@@ -6,7 +6,7 @@
 
 '''
 
-from models.content import Content
+from crcms_spider.models.content import Content
 from datetime import datetime
 
 class Store(object):

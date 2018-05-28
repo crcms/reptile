@@ -8,19 +8,23 @@
 
 import importlib
 from abc import ABCMeta, abstractmethod
-from modules.download.response import Response
+from crcms_spider.base.downloader import Response
+from configparser import ConfigParser
 
 
 class Parse(metaclass=ABCMeta):
-
     _response = None
+    _config = None
 
-    def __init__(self, response: Response) -> None:
+
+    def __init__(self, response: Response, config: dict) -> None:
         '''
         :param response:
         :type Response
         '''
         self._response = response
+        self._config = config
+
 
     @abstractmethod
     def urls(self) -> set:
@@ -30,6 +34,7 @@ class Parse(metaclass=ABCMeta):
         '''
         pass
 
+
     @abstractmethod
     def content(self) -> str:
         '''
@@ -38,8 +43,9 @@ class Parse(metaclass=ABCMeta):
         '''
         pass
 
+
     @staticmethod
-    def factory(type: str, response: Response):
+    def factory(config: dict) -> 'Parse':
         '''
         子类工厂
         :param type:
@@ -48,9 +54,13 @@ class Parse(metaclass=ABCMeta):
         :type Response
         :return: Parse()
         '''
-        parse = importlib.import_module('modules.parser.parse_' + type)
 
-        parse = getattr(parse, type.capitalize())(response)
+        type = config['type'] or 'html'
+        module = config['module'] or 'crcms_spider.parser.parse_html'
+
+        parse = importlib.import_module(module)
+
+        parse = getattr(parse, type.capitalize())
         if parse is None:
             raise TypeError
 
@@ -58,4 +68,13 @@ class Parse(metaclass=ABCMeta):
 
 
 if __name__ == '__main__':
-    print(Parse.factory('html', 'x'))
+    import os
+
+    config = ConfigParser()
+    path = os.fspath(os.getcwd() + '/../../config.ini')
+    config.read(path)
+
+    print(config['parse']['module'])
+    exit()
+
+    print(Parse.factory(config, 'x'))

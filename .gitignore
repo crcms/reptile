@@ -10,3 +10,6 @@ modules/__pycache__/
 models/__pycache__/
 modules/store/__pycache__/
 modules/url/__pycache__/
+crcms_spider/base/__pycache__/
+crcms_spider/models/__pycache__/
+crcms_spider/parser/__pycache__/

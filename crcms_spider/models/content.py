@@ -6,7 +6,7 @@
 
 '''
 
-from models.connnection import Connection
+from crcms_spider.models.connnection import Connection
 from datetime import datetime
 
 

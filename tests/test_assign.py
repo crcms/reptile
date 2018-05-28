@@ -2,9 +2,11 @@
 
 '''
 
-存储
+
 
 '''
 
-class Store(object):
-    pass
+x = {}
+
+y = x or 123
+print(y)
