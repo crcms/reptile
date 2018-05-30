@@ -36,14 +36,16 @@ class Dispatch(object):
 
 if __name__ == '__main__':
     import configparser, os
-
-    url = Url()
-    url.adds(set(['http://thinkphp.cn']))
-
-    store = Store()
+    from crcms_spider.models.content import Content
 
     config = configparser.ConfigParser()
     config.read(os.getcwd() + '/../../config.ini')
+
+    url = Url(Content(),dict(config['manage']) )
+    print(dict(config['manage']))
+    url.adds(set([config['manage']['first_url']]))
+
+    store = Store()
 
     parse = Parse.factory(dict(config['parse']))
 

@@ -9,35 +9,45 @@
 from crcms_spider.models.content import Content
 from datetime import datetime
 from urllib.parse import urlparse
+from abc import ABCMeta, abstractmethod
+
 
 class Url(object):
     _urls = []
+    _model = None
+    _config = None
+    _repeat_update_time = 86400
 
 
-    def __init__(self):
-        pass
+    def __init__(self, model: Content, config: dict) -> None:
+        self._model = model
+        self._config = config
 
 
     def adds(self, urls: set):
         if not isinstance(urls, set):
             raise TypeError
 
-        content = Content()
         new_urls = []
         for url in urls:
-            # TODO 判断是否再次更新
-            result = content.get_one_by_url(url)
-            if result is not None:
-                if (result['status'] == 2 and int(datetime.now().timestamp()) - result['updated_at']) < 86400:
-                    continue
+
+            if self._model.get_exists_url(url):
+                # 判断是否再次更新
+                repeat_update_time = int(self._config.get('repeat_update_time')) or self._repeat_update_time
+                result = self._model.get_need_updated_url(url, repeat_update_time)
+                if result is not None:
+                    if (result['status'] == 2 and int(datetime.now().timestamp()) - result['updated_at']) < int(
+                            self._config.get('repeat_update_time')) or self._repeat_update_time:
+                        continue
             else:
-                # TODO 写入数据库
-                result = content.create({
+
+                result = self._model.create({
                     'host': urlparse(url).netloc,
                     'url': url,
                     'status': 1
                 })
 
+            # TODO 写入数据库
             new_urls.append(result)
 
         # 保存至内存操作
@@ -47,7 +57,7 @@ class Url(object):
     def _store_memory(self, urls):
 
         if len(self._urls) < 500:
-            self._urls = self._urls[len(self._urls)-1:] = urls
+            self._urls = self._urls[len(self._urls) - 1:] = urls
 
 
     def get_url(self) -> dict or None:
@@ -60,6 +70,16 @@ class Url(object):
         return self._urls.pop()
 
 
+class AbstractUrl(metaclass=ABCMeta):
+
+    @abstractmethod
+    def check_need_update(self, model: 'AbstractUrl', timestamp: int) -> bool: pass
+
+
+    @abstractmethod
+    def get_by_url(self, url: str) -> dict or None: pass
+
+
 if __name__ == '__main__':
     from pymongo import MongoClient
 
@@ -69,7 +89,7 @@ if __name__ == '__main__':
         'url': 'abc',
         'status': 1
     })
-    print(Content().update(result['_id'],{'$set':{'url':123,'xx':'ss'}}))
+    print(Content().update(result['_id'], {'$set': {'url': 123, 'xx': 'ss'}}))
     # print(Content().get_one_by_url_status('abc', 1))
 
     # print(Content().get_not_climb(500))

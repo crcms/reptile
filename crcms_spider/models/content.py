@@ -8,14 +8,15 @@
 
 from crcms_spider.models.connnection import Connection
 from datetime import datetime
+from crcms_spider.base.manager import AbstractUrl
 
 
-class Content(object):
+class Content(AbstractUrl):
     _pdo = None
 
     _database = 'reptile'
 
-    _collection_name = 'contents'
+    _collection_name = 'contents2'
 
     _collection = None
 
@@ -70,10 +71,22 @@ class Content(object):
     def get_one_by_status(self, status):
         return self._collection.find_one({'status': status})
 
+    # ============================
+
+
+    def get_need_updated_url(self, url: str, timestamp: int) -> dict or None:
+        return self._collection.find_one(
+            {'url': url, 'status': 2, 'updated_at': {'$lt': int(datetime.now().timestamp()) - timestamp}})
+
+
+    def get_by_url(self, url: str) -> dict or None:
+        return self._collection.find_one({'url': url})
+
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         print('--close--')
         self._pdo.close()
+
 
 if __name__ == '__main__':
     c = Content()
