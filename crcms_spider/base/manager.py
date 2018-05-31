@@ -7,40 +7,16 @@
 '''
 
 from urllib.parse import urlparse
-from abc import ABCMeta, abstractmethod
-
-
-class AbstractUrl(metaclass=ABCMeta):
-
-    @staticmethod
-    @abstractmethod
-    def check_need_update(model: 'AbstractUrl', timestamp: int) -> bool: pass
-
-    @staticmethod
-    @abstractmethod
-    def get_by_url(url: str) -> 'AbstractUrl' or None: pass
-
-    @staticmethod
-    @abstractmethod
-    def get_not_climb(limit: int): pass
-
-    @staticmethod
-    @abstractmethod
-    def create(**kwargs) -> 'AbstractUrl': pass
-
-    @staticmethod
-    @abstractmethod
-    def update(model: 'AbstractUrl', **kwargs):pass
-
+from crcms_spider.base.store import AbstractStore
 
 class Url(object):
     _urls = []
-    _model = None
+    _repository = None
     _config = None
     _repeat_update_time = 86400
 
-    def __init__(self, model: AbstractUrl, config: dict) -> None:
-        self._model = model
+    def __init__(self, repository: AbstractStore, config: dict) -> None:
+        self._repository = repository
         self._config = config
 
     def adds(self, urls: set):
@@ -50,15 +26,15 @@ class Url(object):
         new_urls = []
         for url in urls:
 
-            result = self._model.get_by_url(url)
+            result = self._repository.get_by_url(url)
 
             if result is not None:
                 # 判断是否再次更新
                 repeat_update_time = int(self._config.get('repeat_update_time')) or self._repeat_update_time
-                if not self._model.check_need_update(result, repeat_update_time):
+                if not self._repository.check_need_update(result, repeat_update_time):
                     continue
             else:
-                result = self._model.create(
+                result = self._repository.create(
                     host=urlparse(url).netloc,
                     url=url,
                 )
@@ -76,7 +52,7 @@ class Url(object):
 
     def get_url(self) -> dict or None:
         if len(self._urls) == 0:
-            self._urls = list(self._model.get_not_climb(500))
+            self._urls = list(self._repository.get_not_climb(500))
 
         if len(self._urls) == 0:
             return None
@@ -85,7 +61,8 @@ class Url(object):
 
 
 if __name__ == '__main__':
-    from pymongo import MongoClient
+    pass
+    # from pymongo import MongoClient
 
     # Content().get_by_url('')
 
