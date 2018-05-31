@@ -36,7 +36,7 @@ class Parse(metaclass=ABCMeta):
 
 
     @abstractmethod
-    def content(self) -> str:
+    def contents(self) -> dict:
         '''
         返回指定区域内容
         :return:

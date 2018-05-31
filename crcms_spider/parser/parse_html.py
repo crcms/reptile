@@ -40,12 +40,12 @@ class Html(Parse):
                 url.attrs.get('href').find('://') == -1) else url.attrs.get('href') for url in urls])
 
 
-    def content(self) -> str:
+    def contents(self) -> dict:
         '''
 
         :return: str
         '''
-        return self._response.responseText
+        return dict(content=self._response.responseText,title=self.title())
 
 
     def title(self) -> str:

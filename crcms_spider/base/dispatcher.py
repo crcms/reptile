@@ -11,7 +11,7 @@ from crcms_spider.base.downloader import Request, Response
 from crcms_spider.base.parser import Parse
 from configparser import ConfigParser
 from crcms_spider.models.data import Data
-from crcms_spider.base.store import Store,AbstractStore
+from crcms_spider.base.store import Store, AbstractStore
 
 
 class Dispatch(object):
@@ -30,10 +30,7 @@ class Dispatch(object):
 
             url_manage.adds(response.urls())
 
-            url_object = store.update(url_object,
-                                      content=response.content(),
-                                      title=response.title(),
-                                      )
+            url_object = store.update(url_object, **response.contents())
 
             print('已抓取的URL' + url_object['url'] + '(' + str(url_object.id) + ')')
 
@@ -50,8 +47,6 @@ if __name__ == '__main__':
     url = Url(store, dict(config['manage']))
     # print(dict(config['manage']))
     url.adds(set([config['manage']['first_url']]))
-
-
 
     parse = Parse.factory(dict(config['parse']))
 
