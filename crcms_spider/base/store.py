@@ -9,7 +9,7 @@
 from abc import ABCMeta, abstractmethod
 from mongoengine.document import Document
 from datetime import datetime
-from crcms_spider.models.data import Data, Const
+from crcms_spider.models.data import Const
 
 CONST = Const()
 
