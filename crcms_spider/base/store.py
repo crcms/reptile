@@ -44,6 +44,10 @@ class Store(AbstractStore):
 
 
     def __init__(self, model: Document):
+
+        if type(model) != type(Document):
+            raise TypeError
+
         self._model = model
 
 
